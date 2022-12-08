@@ -10,6 +10,17 @@ import feedparser
 from pandas.io.json import json_normalize
 import pandas as pd
 import requests
+import nltk
+import ssl
+
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+nltk.download()
 from nltk import word_tokenize, pos_tag
 
 # a list of all the sites to source from
@@ -49,8 +60,6 @@ feelingsList = []
 
 #repoPath = '/home/pi/prayer_companion_moma_git/prayercompanion-text'
 #repoPath = '/Users/ynpv8/Documents/prayercompanion/prayer_update/prayer_companion_moma_git/prayercompanion-text'
-
-from nltk import word_tokenize, pos_tag
 
 def txt2List(text):
     global feelingsList
