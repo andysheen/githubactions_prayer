@@ -14,5 +14,5 @@ jobs:
         python-version: '3.8'
         cache: 'pip'
     - run: pip install -r requirements.txt
-    - run: python -m nltk.downloader punkt stopwords
+    - run: python -m nltk.downloader punkt stopwords averaged_perceptron_tagger
     - run: python test.py
