@@ -13,15 +13,14 @@ jobs:
       with:
         python-version: '3.8'
         cache: 'pip'
+    - run: pip install -r requirements.txt
+    - run: python -m nltk.downloader punkt stopwords averaged_perceptron_tagger
+    - run: python test.py
     - name: setup git config
       run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-          git pull origin main
-    - run: pip install -r requirements.txt
-    - run: python -m nltk.downloader punkt stopwords averaged_perceptron_tagger
-    - run: python test.py
     - name: commit
       run: |
           # Stage the file, commit and push
