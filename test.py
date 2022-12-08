@@ -12,14 +12,6 @@ import pandas as pd
 import requests
 import nltk
 import ssl
-
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-else:
-    ssl._create_default_https_context = _create_unverified_https_context
-
 nltk.download()
 from nltk import word_tokenize, pos_tag
 
