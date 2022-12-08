@@ -13,6 +13,7 @@ jobs:
       with:
         python-version: '3.8'
         cache: 'pip'
+    - run: git pull origin main
     - run: pip install -r requirements.txt
     - run: python -m nltk.downloader punkt stopwords averaged_perceptron_tagger
     - run: python test.py
