@@ -266,7 +266,7 @@ def postGithub():
 
 txt2List(os.path.join(sys.path[0], "archivefeelings.txt"))
 
-while (1==1):
+#while (1==1):
 
     print("** Getting news and feelings **")
     #pullFromGithub()
