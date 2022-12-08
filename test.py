@@ -9,6 +9,7 @@ import feedparser
 from pandas.io.json import json_normalize
 import pandas as pd
 import requests
+from nltk import word_tokenize, pos_tag
 
 # a list of all the sites to source from
 sites = ["http://www.irinnews.org/irin.xml",\
@@ -47,6 +48,8 @@ feelingsList = []
 
 #repoPath = '/home/pi/prayer_companion_moma_git/prayercompanion-text'
 #repoPath = '/Users/ynpv8/Documents/prayercompanion/prayer_update/prayer_companion_moma_git/prayercompanion-text'
+
+from nltk import word_tokenize, pos_tag
 
 def txt2List(text):
     global feelingsList
@@ -151,9 +154,9 @@ def getNews(site):
         s = s.replace('$','&')
         # now test if the headline contains characters the device cannot display
         if (testForDisplayables(s) < 1):
-            #continue
+            continue
 
-        #if is_valid_sentence(s) == True :
+        if is_valid_sentence(s) == True :
             selectedNews.append(s)
 
 
@@ -197,9 +200,9 @@ def getFeelings(call):
         # now test if the headline contains characters the device cannot display
         if (testForDisplayables(s) < 1):
             print("displayables")
-            #continue
+            continue
 
-        #if is_valid_sentence(s) == True :
+        if is_valid_sentence(s) == True :
             print(s)
             print("appending")
             selectedFeelings.append(s)
@@ -243,9 +246,9 @@ def getFeelingsLocal():
         # now test if the headline contains characters the device cannot display
         if (testForDisplayables(s) < 1):
             print("displayables")
-            #continue
+            continue
 
-        #if is_valid_sentence(s) == True :
+        if is_valid_sentence(s) == True :
             print(s)
             s = s + '\n'
             print("appending")
@@ -266,92 +269,90 @@ def postGithub():
 
 txt2List(os.path.join(sys.path[0], "archivefeelings.txt"))
 
-#while (1==1):
+print("** Getting news and feelings **")
+#pullFromGithub()
+#try:
 
-    print("** Getting news and feelings **")
-    #pullFromGithub()
-    #try:
+    #web.clear_cache()
 
-        #web.clear_cache()
-
-    log =  time.strftime("New Sourcing at: " "%A, %B %d, %Y" " at " "%H:%M:%S", time.localtime())
-    print(log)
+log =  time.strftime("New Sourcing at: " "%A, %B %d, %Y" " at " "%H:%M:%S", time.localtime())
+print(log)
 
 
-    selectedSites1 = []
-    selectedSites2 = []
+selectedSites1 = []
+selectedSites2 = []
 
-    selectedSites = random.sample(population, numberSites1+numberSites2)
-    for p in range(0,numberSites1):
-        selectedSites1.append(selectedSites[p])
-    for q in range(numberSites1,numberSites1+numberSites2):
-        selectedSites2.append(selectedSites[q])
+selectedSites = random.sample(population, numberSites1+numberSites2)
+for p in range(0,numberSites1):
+    selectedSites1.append(selectedSites[p])
+for q in range(numberSites1,numberSites1+numberSites2):
+    selectedSites2.append(selectedSites[q])
 
-    selectedSites1.sort()
-    selectedSites2.sort()
+selectedSites1.sort()
+selectedSites2.sort()
 
-    for p in range(0, numberSites1):
-        print(sites[selectedSites1[p]])
+for p in range(0, numberSites1):
+    print(sites[selectedSites1[p]])
 ##           log = string.join(log, sites1[selectedSites1[p]])
 
-    for q in range(0, numberSites1):
-        getNews(sites[selectedSites1[q]])
+for q in range(0, numberSites1):
+    getNews(sites[selectedSites1[q]])
 
 
-    selectedNews = '\n'.join(selectedNews)
-    selectedNews = selectedNews + '\n'
-    print("test")
-    print(sys.path[0])
-    newsfile = open(os.path.join(sys.path[0], 'newsfile.txt'), 'w')
-    newsfile.write(selectedNews)
-    newsfile.close()
+selectedNews = '\n'.join(selectedNews)
+selectedNews = selectedNews + '\n'
+print("test")
+print(sys.path[0])
+newsfile = open(os.path.join(sys.path[0], 'newsfile.txt'), 'w')
+newsfile.write(selectedNews)
+newsfile.close()
 
-    print("News File")
-    print(selectedNews)
+print("News File")
+print(selectedNews)
 
-    selectedNews = []
+selectedNews = []
 
-    for p in range(0, numberSites2):
-        print(sites[selectedSites2[p]])
+for p in range(0, numberSites2):
+    print(sites[selectedSites2[p]])
 ##           log = string.join(log, sites2[selectedSites2[p]])
 
-    for q in range(0, numberSites2):
-        getNews(sites[selectedSites2[q]])
+for q in range(0, numberSites2):
+    getNews(sites[selectedSites2[q]])
 
-    #getFeelings("http://api.wefeelfine.org:8080/ShowFeelings?display=text&returnfields=sentence&limit=60")
-    getFeelingsLocal()
-    selectedNews = '\n'.join(selectedNews)
-    selectedNews = selectedNews + '\n'
+#getFeelings("http://api.wefeelfine.org:8080/ShowFeelings?display=text&returnfields=sentence&limit=60")
+getFeelingsLocal()
+selectedNews = '\n'.join(selectedNews)
+selectedNews = selectedNews + '\n'
 
-    newsfile = open(os.path.join(sys.path[0], "newsfile.txt"), 'w')
-    newsfile.write(selectedNews)
-    newsfile.close()
+newsfile = open(os.path.join(sys.path[0], "newsfile.txt"), 'w')
+newsfile.write(selectedNews)
+newsfile.close()
 
-    for line in selectedFeelings:
-        if line in ['\n', '\r\n']:
-            selectedFeelings.remove(line)
-    selectedFeelings.append(selectedNews)
-    selectedFeelings.reverse()
+for line in selectedFeelings:
+    if line in ['\n', '\r\n']:
+        selectedFeelings.remove(line)
+selectedFeelings.append(selectedNews)
+selectedFeelings.reverse()
 
-    selectedFeelings = ' '.join(selectedFeelings)
-    feelingsfile = open(os.path.join(sys.path[0], "feelingsfile.txt"), 'w')
-    feelingsfile.write(selectedFeelings)
-    feelingsfile.close()
+selectedFeelings = ' '.join(selectedFeelings)
+feelingsfile = open(os.path.join(sys.path[0], "feelingsfile.txt"), 'w')
+feelingsfile.write(selectedFeelings)
+feelingsfile.close()
 
-    print("Feelings File")
-    print(selectedFeelings)
+print("Feelings File")
+print(selectedFeelings)
 
-    selectedNews = []
-    selectedFeelings = []
+selectedNews = []
+selectedFeelings = []
 
 
 
-    sourcinglogfile = open(os.path.join(sys.path[0], "sourcinglogfile.txt"), 'w')
-    sourcinglogfile.write(log)
-    sourcinglogfile.close()
-    print("** Uploading news and feelings **")
-    #postGithub()
+sourcinglogfile = open(os.path.join(sys.path[0], "sourcinglogfile.txt"), 'w')
+sourcinglogfile.write(log)
+sourcinglogfile.close()
+print("** Uploading news and feelings **")
+#postGithub()
 
-    print("** Uploading done **")
-    print(log)
-    print("** Next sourcing in 60 minutes **")
+print("** Uploading done **")
+print(log)
+print("** Next sourcing in 60 minutes **")
