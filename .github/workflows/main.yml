@@ -8,13 +8,10 @@ jobs:
   date:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-        with:
-            python-version: '3.7'
-            check-latest: true
-            cache: 'pip'
-      - run: pip install -r requirements.txt
-      - run: pip test
-      - name: run python
-      - run: python test.py
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+    - run: pip install -r requirements.txt
+    - run: pip test
