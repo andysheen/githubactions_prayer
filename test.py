@@ -1,10 +1,9 @@
-mport git
+
 import time
 import os
 import sys
 import requests
 import random
-from git import Repo
 #import web
 
 import feedparser
