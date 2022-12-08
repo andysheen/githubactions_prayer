@@ -1,4 +1,3 @@
-
 import time
 import os
 import sys
@@ -10,10 +9,6 @@ import feedparser
 from pandas.io.json import json_normalize
 import pandas as pd
 import requests
-import nltk
-import ssl
-nltk.download()
-from nltk import word_tokenize, pos_tag
 
 # a list of all the sites to source from
 sites = ["http://www.irinnews.org/irin.xml",\
@@ -156,9 +151,9 @@ def getNews(site):
         s = s.replace('$','&')
         # now test if the headline contains characters the device cannot display
         if (testForDisplayables(s) < 1):
-            continue
+            #continue
 
-        if is_valid_sentence(s) == True :
+        #if is_valid_sentence(s) == True :
             selectedNews.append(s)
 
 
@@ -202,9 +197,9 @@ def getFeelings(call):
         # now test if the headline contains characters the device cannot display
         if (testForDisplayables(s) < 1):
             print("displayables")
-            continue
+            #continue
 
-        if is_valid_sentence(s) == True :
+        #if is_valid_sentence(s) == True :
             print(s)
             print("appending")
             selectedFeelings.append(s)
@@ -248,9 +243,9 @@ def getFeelingsLocal():
         # now test if the headline contains characters the device cannot display
         if (testForDisplayables(s) < 1):
             print("displayables")
-            continue
+            #continue
 
-        if is_valid_sentence(s) == True :
+        #if is_valid_sentence(s) == True :
             print(s)
             s = s + '\n'
             print("appending")
@@ -360,5 +355,3 @@ while (1==1):
     print("** Uploading done **")
     print(log)
     print("** Next sourcing in 60 minutes **")
-
-    
